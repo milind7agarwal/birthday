@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Arham</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --surface: #171717;
+            --text-main: #f5f5f5;
+            --text-muted: #a3a3a3;
+            --accent: #d4af37; /* Gold for sleek look */
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Intro Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1f1f1f 0%, var(--bg) 70%);
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            color: #fff;
+        }
+
+        .hero p {
+            font-weight: 300;
+            color: var(--text-muted);
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            max-width: 600px;
+        }
+
+        .gift-btn {
+            margin-top: 40px;
+            padding: 12px 32px;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .gift-btn:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #fff;
+        }
+
+        /* Memory Lane (Sleek Carousel) */
+        .memory-section {
+            padding: 100px 20px;
+            background: var(--surface);
+        }
+
+        .carousel {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            padding: 20px 0 40px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none; /* Firefox */
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .carousel::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
+        }
+
+        .card {
+            flex: 0 0 320px;
+            scroll-snap-align: center;
+            height: 450px;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            group: card;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(80%) brightness(0.8);
+            transition: all 0.5s ease;
+        }
+
+        .card:hover img {
+            filter: grayscale(0%) brightness(1);
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .card:hover .card-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+
+        /* Cake Section (Minimalist & Sleek) */
+        .cake-section {
+            padding: 100px 20px;
+            text-align: center;
+            background: var(--bg);
+        }
+
+        .minimal-cake {
+            position: relative;
+            width: 250px;
+            height: 180px;
+            margin: 0 auto 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .minimal-cake:hover {
+            transform: scale(1.02);
+        }
+
+        .cake-tier-top {
+            width: 140px;
+            height: 70px;
+            background: #fff;
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            z-index: 2;
+            box-shadow: inset 0 -10px 20px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.3);
+            border-bottom: 3px solid #d4af37;
+        }
+
+        .cake-tier-bottom {
+            width: 200px;
+            height: 80px;
+            background: #fff;
+            border-radius: 8px;
+            z-index: 1;
+            box-shadow: inset 0 -10px 20px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.4);
+            position: relative;
+        }
+
+        .cake-tier-bottom::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: -15px;
+            right: -15px;
+            height: 10px;
+            background: #d4af37;
+            border-radius: 5px;
+        }
+
+        .sleek-candle {
+            position: absolute;
+            top: -27px;
+            width: 12px;
+            height: 55px;
+            background: repeating-linear-gradient(45deg, #fff, #fff 5px, #d4af37 5px, #d4af37 10px);
+            border-radius: 6px;
+            z-index: 3;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .sleek-flame {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 15px var(--accent);
+            animation: sleekFlicker 2s infinite ease-in-out alternate;
+            transition: opacity 0.5s;
+        }
+
+        .sleek-flame.blown-out {
+            opacity: 0;
+            animation: none;
+        }
+
+        @keyframes sleekFlicker {
+            0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+            100% { transform: translateX(-50%) scale(1.05); opacity: 1; }
+        }
+
+        .blow-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .blow-btn:hover {
+            color: var(--accent);
+        }
+
+        .wish-text {
+            margin-top: 20px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--accent);
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        /* Envelope & Letter - Fixed Attachment */
+        .letter-section {
+            padding: 100px 20px;
+            background: var(--surface);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .envelope-container {
+            position: relative;
+            width: 340px;
+            height: 220px;
+            cursor: pointer;
+            margin-top: 40px;
+        }
+
+        .envelope-back {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #2a2a2a;
+            border-radius: 8px;
+            border: 1px solid #3a3a3a;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-top: 120px solid #333;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            z-index: 4;
+        }
+
+        .envelope-front {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 100%;
+            border-left: 170px solid #222;
+            border-right: 170px solid #222;
+            border-bottom: 120px solid #1a1a1a;
+            border-radius: 0 0 8px 8px;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        /* The Letter inside the envelope */
+        .letter-paper {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background: #fdfbf7;
+            color: #111;
+            padding: 40px 30px;
+            border-radius: 4px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            z-index: 2;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 200px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .envelope-container.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .envelope-container.open .letter-paper {
+            transform: translateY(-160px);
+            height: 400px;
+            z-index: 5;
+            overflow-y: auto;
+        }
+        
+        .letter-paper::-webkit-scrollbar {
+            width: 6px;
+        }
+        .letter-paper::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 3px;
+        }
+
+        .letter-content {
+            font-family: 'Inter', serif;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        .letter-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            background: var(--bg);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Happy Birthday, Arham</h1>
+        <p>Here's to another year of great rides, new adventures, and making memories.</p>
+        <button class="gift-btn" onclick="triggerConfetti()">Celebrate</button>
+    </section>
+
+    <!-- Memory Lane -->
+    <section class="memory-section">
+        <h2 class="section-title">Memory Lane</h2>
+        <div class="carousel">
+            <div class="card">
+                <img src="./assests/pic_2.jpg" alt="Cars">
+                <div class="card-content">
+                    <h3>The Need for Speed</h3>
+                    <p>To the guy who appreciates a fine engine and a beautiful ride. May this year bring you the sickest cars and open roads.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="./assests/pic_3.jpg" alt="Trips">
+                <div class="card-content">
+                    <h3>Wanderlust</h3>
+                    <p>Here's to the unforgettable trips and the ones yet to come. The world is yours to explore.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="./assests/pic_1.jpg" alt="Horses">
+                <div class="card-content">
+                    <h3>Equestrian Spirit</h3>
+                    <p>Majestic, free, and spirited—just like your love for horses. Keep riding towards your dreams.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="./assests/snapchat.jpg" alt="Us">
+                <div class="card-content">
+                    <h3>Our Moments</h3>
+                    <p>Through all the laughter, the stupid jokes, and the everyday moments. Here's to us.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sleek Cake Section -->
+    <section class="cake-section">
+        <h2 class="section-title">Make a Wish</h2>
+        <div class="minimal-cake" onclick="blowCandles()">
+            <div class="sleek-candle">
+                <div class="sleek-flame" id="flame"></div>
+            </div>
+            <div class="cake-tier-top"></div>
+            <div class="cake-tier-bottom"></div>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: -20px; margin-bottom: 20px;">Tap the cake to blow the candle</p>
+        <div class="wish-text" id="wish-popup">May your wishes come true.</div>
+    </section>
+
+    <!-- Envelope & Letter Section -->
+    <section class="letter-section">
+        <h2 class="section-title">A Special Letter</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Tap to open</p>
+        
+        <div class="envelope-container" onclick="this.classList.toggle('open')">
+            <div class="envelope-back"></div>
+            <div class="envelope-flap"></div>
+            <div class="letter-paper" onclick="event.stopPropagation()">
+                <div class="letter-content">
+<h3>Dear Arham,</h3>
+yk wats funny?
+
+i never really knew u as a person in the beginning. i never even tried to. we just interacted we talked we existed somewhere in each other's lives without either of us knowing that one day this random friendship would become something i would care about this much.
+
+and then one day you said something so casually that m ur good friend and I was like wait… u consider me a good friend?
+
+i dont know why maybe bc i hadnt realized that somewhere between all conversations random interactions jokes and everyday moments you had started becoming someone important to me. and after that i started putting in effort. 
+
+and somehow without either of us really planning it u became genuinely one of my very good friend. now when i think about knowing you i don't think i know you in the ordinary way. i think i see you from a little deeper perspective. i see the person behind all the masti the jokes the laughter the stupid things you do and that endlessly happy energy u carry around.
+
+youre such a sweet person arammm and maybe what makes that sweetness even more beautiful is knowing that you've been through alot of things. you've had your own share of pain your own things to carry your own moments that probably changed you in ways people don't see.
+
+and somehow you still choose to be this person. still happy. still playful. still making people laugh. still being that person who can turn an ordinary moment into something stupid and funny.
+
+i dont know how you do it maybe you don't even realize how special that is. but i notice it and i think that's one of the things i admire about you the most. you havent allowed the difficult parts of life to completely take away the soft childish part of you.
+
+and maybe thats why i feel so connected to you bc when i look at u sometimes i see a little bit of the person i used to be. that childishness. that silly happiness. that ability to get excited. that version of me that used to exist so naturally. and maybe thats why being around you feels dif it feels familiar. like sitting beside a part of myself that i thought i had lost. my inner child somehow feels safe around your childishness.
+
+and honestly i love that about you. i love teasing you. i love annoying you. i love seeing you react to the stupidest things. you're genuinely so cute brooo. sometimes i literally think that if you were actually my brother i'd be like "yess h n ghar mein ek mard jise m pura din pareshan kr skti hu". i'd probably spend half my time irritating u and the other half defending you fr. thats just the kind of bond i feel with you.
+
+but today is your birthday and somehow on your birthday all those silly things feel a little less silly. bc today isnt just about wishing you another year of life it's about being grateful that this year of your life brought you into mine.
+
+i'm genuinely grateful that i got to know you. grateful for the conversations, the laughter, the teasing, the random moments, the comfort, the friendship i never expected, and even the attachment i never planned on having.
+
+i won't lie i'm attached to you. probably more than i should admit. our bond matters to me a lot and yk that. and that's why sometimes even the smallest things affect me more than they probably should. if something ever happened between us i know it would hurt me deeply bc somewhere along the way u stopped being just someone i know. you became someone whose presence i genuinely feel. someone i feel happy around. someone whose existence has become a small but important part of my everyday life.
+
+and maybe that's scary sometimes because when someone becomes important their little actions start carrying more weight. but today i don't want to focus on the fear of losing anything today i just want to celebrate the fact that i have you as a friend.
+
+so arammmm on your birthday i hope life gives you the kind of happiness you so naturally give to other people. i hope you get people who stay. people who understand you without you having to explain every little thing. people who notice when your laughter is real and when you're using it to hide something.
+
+i hope you never lose that childish part of yourself. please don't let the world convince you that growing up means becoming hard. stay silly. stay happy. keep laughing too loudly when something is funny. keep doing stupid things. keep making people around you feel lighter. keep being that person who brings a little more life into a room simply by being there.
+
+and when life gets heavy again i hope you remember that you don't always have to pretend to be okay. you don't always have to be the happy one. you don't always have to make everyone else smile. you deserve someone who sits beside you when you're not okay too. someone who doesn't need you to be cheerful to love having you around.
+
+and i hope this year brings you closer to becoming the person you want to be without making you lose the person you already are. i hope you achieve everything. i hope you get opportunities that make you proud of yourself. i hope you find moments that makes u happy.
+
+and more than anything i hope you become genuinely deeply happy. not the kind of happy that everyone sees. the kind that exists quietly inside you. the kind that stays even when nobody is watching.
+
+and maybe someday when we're much older if we'll look back omg memories hope you never lose that little boy inside you who still knows how to laugh at the stupidest things. because honestly that's one of the versions of you i'm most grateful to know.
+
+happy birthday broooooo loveee you sooo muchh happy birthday yayaya happy birthday
+
+Cheers to you!
+-Amrita Soni
+                </div>
+            </div>
+            <div class="envelope-front"></div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Created with love for Arham.</p>
+    </footer>
+
+    <script>
+        function triggerConfetti() {
+            var duration = 3000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#d4af37', '#ffffff', '#1f1f1f']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#d4af37', '#ffffff', '#1f1f1f']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        let candlesBlown = false;
+        function blowCandles() {
+            if (!candlesBlown) {
+                const flame = document.getElementById('flame');
+                flame.classList.add('blown-out');
+                
+                const popup = document.getElementById('wish-popup');
+                popup.style.opacity = '1';
+                
+                playBlowSound();
+                candlesBlown = true;
+            }
+        }
+
+        function playBlowSound() {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            const ctx = new AudioContext();
+            const osc = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(150, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.5);
+            
+            gainNode.gain.setValueAtTime(0.5, ctx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+            
+            osc.connect(gainNode);
+            gainNode.connect(ctx.destination);
+            
+            osc.start();
+            osc.stop(ctx.currentTime + 0.5);
+        }
+    </script>
+</body>
+</html>
